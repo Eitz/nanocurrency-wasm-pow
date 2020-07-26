@@ -24,7 +24,7 @@ To compile it to Web Assembly you need to install **emscripten**:
 With that done, at the repo directory run:
 
 ```bash
-emcc functions.cpp blake2/blake2b-ref.cpp  -o pow.js -s WASM=1 -std=gnu++11 -O3 -s EXPORTED_FUNCTIONS="['getPoW']"
+emcc functions.cpp blake2/blake2b-ref.cpp -o pow.js -s WASM=1 -std=gnu++11 -O3 -s EXPORTED_FUNCTIONS='["_getPowLight", "_getPowHeavy"]' -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall"]'
 ```
 
 It will output 2 files: `pow.js` and `pow.wasm`, place those files together
