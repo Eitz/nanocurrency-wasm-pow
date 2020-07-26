@@ -1,8 +1,10 @@
-# RaiBlocksWebAssemblyPoW
+* Forked from [jaimehgb/RaiBlocksWebAssemblyPoW](https://github.com/jaimehgb/RaiBlocksWebAssemblyPoW)
+
+# nanocurrency-wasm-pow
 
 <h3>Overview</h3>
 <p>
-This repo contains a simple RaiBlocks PoW implementation compiled to WebAssembly to boost its performance on browsers. That's been done using
+This repo contains a simple Nano Currency PoW implementation compiled to WebAssembly to boost its performance on browsers. That's been done using
 emscripten.
 Compiling to WebAssembly, the result is around 10 times faster than a pure JS PoW implementation (e.g.: <a href="https://github.com/SergiySW/RaiBlocksJS/blob/master/rai.pow.js" target="_blank">RaiBlocksJS</a>).
 
