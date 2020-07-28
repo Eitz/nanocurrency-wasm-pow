@@ -1,5 +1,7 @@
 - Forked from [jaimehgb/RaiBlocksWebAssemblyPoW](https://github.com/jaimehgb/RaiBlocksWebAssemblyPoW)
 
+**Currently a work in progress.**, use for reference only.
+
 ## nanocurrency-wasm-pow
 
 ### Overview
@@ -11,9 +13,9 @@ Compiling to WebAssembly, the result is around 10 times faster than a pure JS Po
 
 This basically makes possible to generate proofs of work on modern browsers in a reasonable time.
 
-### Installation and usage
+### Compiling from source
 
-All the PoW work takes place at <code>functions.cpp</code>.
+All the PoW work takes place at <code>nano-pow.cpp</code>.
 There is the main loop which calculates the PoW and a function which
 can be called from JS and runs the loop (the iterations function).
 
@@ -24,11 +26,11 @@ To compile it to Web Assembly you need to install **emscripten**:
 With that done, at the repo directory run:
 
 ```bash
-emcc functions.cpp blake2/blake2b-ref.cpp -o pow.js -s WASM=1 -std=gnu++11 -O3 -s EXPORTED_FUNCTIONS='["_getPowLight", "_getPowHeavy"]' -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall"]'
+$ ./compile.sh
 ```
 
-It will output 2 files: `pow.js` and `pow.wasm`, place those files together
-somewhere and include `pow.js` in your html as usual.
+It will output 2 files: `nano-pow.js` and `nano-pow.wasm`, place those files together
+somewhere and include `nano-pow.js` in your html as usual.
 
 To call the "getPoW" function you can do:
 

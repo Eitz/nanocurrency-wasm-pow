@@ -1,21 +1,24 @@
 self.importScripts("pow.js");
+self.importScripts("core.js");
 
-var ready = false;
+Module.onRuntimeInitialized = workerInitialize;
 
-Module["onRuntimeInitialized"] = function () {
-  postMessage("ready");
+onmessage = function (ev) {
+  const { hash, type } = ev.data;
 
-  onmessage = function (ev) {
-    var PoW = (hash) => Module.ccall("getPowHeavy", "string", ["string"], hash);
-    var hash = ev.data;
-    //let generate = Module.ccall("getPoW", 'string', ['string'], hash);
-    let generate = PoW(hash);
+  const proofOfWork = type === "heavy" ? getPowHeavy(hash) : getPowLight(hash);
 
-    if (generate != "0000000000000000") {
-      console.log(generate + " found");
-      postMessage(generate); // Worker return
-    } else {
-      postMessage(false);
-    }
-  };
+  if (proofOfWork !== "0000000000000000") {
+    powFound(hash, type, proofOfWork);
+  } else {
+    powNotFound();
+  }
 };
+
+function powNotFound() {
+  return postMessage({ message: "failed" });
+}
+
+function powFound(hash, type, proofOfWork) {
+  return postMessage({ message: "success", hash, type, proofOfWork });
+}

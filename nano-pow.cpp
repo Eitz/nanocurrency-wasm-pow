@@ -1,12 +1,12 @@
-#include "blake2/blake2.h"
-#include "xorshift.hpp"
+#include "vendor/blake2/blake2.h"
+#include "vendor/xorshift.hpp"
 #include <emscripten/emscripten.h>
 #include <random>
 
 const uint64_t THRESHOLD__SEND_CHANGE = 0xfffffff800000000;
 const uint64_t THRESHOLD__OPEN_RECEIVE = 0xfffffe0000000000;
 
-void HexToBytes(char *hexParam, uint8_t *bytesOutput)
+void hexToBytes(char *hexParam, uint8_t *bytesOutput)
 {
     int j = 0;
     std::string hex(hexParam);
@@ -36,13 +36,9 @@ uint64_t iterations(uint8_t *bytes, uint64_t threshold)
     for (int j = 0; j < 16; j++)
         rng.s[j] = distr(generator);
 
-    // more iterations means this functions needs to be called more times
-    // more iterations means this function will be running longer
-    // as killing webworkers will stop the execution anyway I've set a high number of iterations
-    // each thread doesnt need to stay aware of others' results, so they can run
-    // all the time until it finds a solution or it is killed
-    // :)
-    uint64_t iteration(5000000); //5M
+    // 5M iterations
+    uint64_t iteration(5000000);
+
     while (iteration && output < threshold)
     {
         work = rng.next();
@@ -55,18 +51,15 @@ uint64_t iterations(uint8_t *bytes, uint64_t threshold)
 
     if (output > threshold)
     {
-        // printf("value: 0x%016llx\n", output);
-        // printf("value: 0x%016llx\n", work);
         return work;
     }
-    // printf("value: 0x%016llx\n", work);
     return 0;
 }
 
 char *getPow(char *hex, uint64_t threshold)
 {
     uint8_t *bytesOutput;
-    HexToBytes(hex, bytesOutput);
+    hexToBytes(hex, bytesOutput);
     uint64_t work = iterations(bytesOutput, threshold);
     char str[32];
     sprintf(str, "%016llx", work);
