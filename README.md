@@ -11,13 +11,11 @@ Compiling to WebAssembly, the result is around 10 times faster than a pure JS Po
 
 This basically makes possible to generate proofs of work on modern browsers in a **reasonable time** (see below).
 
-### Times (Ryzen 7 3700x):
-**Send/change blocks:** average of <25 seconds
-**Open/receive blocks:** average of <2.5 seconds
+**Average time it takes to compute in a Ryzen 7 3700x**:
+* **Send/change blocks:** average of <25 seconds
+* **Open/receive blocks:** average of <2.5 seconds
 
 ### Usage
-
-See the files in the `examples` directory.
 
 To get the proof of work you can simply add the `nano-pow/index.js` to your source code and do:
 
@@ -47,7 +45,7 @@ To get the proof of work you can simply add the `nano-pow/index.js` to your sour
     </script>
 ```
 
-What that function does is to try to find a valid PoW in a multithreaded fashion. 
+See the files in the `examples` directory for a full overview.
 
 #### Available proof Of Work thresholds
 ```javascript
