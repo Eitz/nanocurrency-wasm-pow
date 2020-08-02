@@ -1,6 +1,3 @@
-# **Currently a work in progress.**
-Use for reference only.
-
 - Forked from [jaimehgb/RaiBlocksWebAssemblyPoW](https://github.com/jaimehgb/RaiBlocksWebAssemblyPoW)
 
 ## nanocurrency-wasm-pow
@@ -12,7 +9,11 @@ to boost its performance on browsers. It uses **emscripten** under the hood.
 
 Compiling to WebAssembly, the result is around 10 times faster than a pure JS PoW implementation (e.g.: [RaiBlocksJS](https://github.com/SergiySW/RaiBlocksJS/blob/master/rai.pow.js)).
 
-This basically makes possible to generate proofs of work on modern browsers in a reasonable time.
+This basically makes possible to generate proofs of work on modern browsers in a **reasonable time** (see below).
+
+### Times (Ryzen 7 3700x):
+**Send/change blocks:** average of <25 seconds
+**Open/receive blocks:** average of <2.5 seconds
 
 ### Usage
 
@@ -81,9 +82,3 @@ There are more docs about the emscripten itself [here](http://kripken.github.io/
 
 This implementation has just been tested in Chrome (Windows 64bit), Firefox (Windows 64bit) and Chrome (Android) but should also work in
 all the [devices supporting WASM](https://developer.mozilla.org/en-US/docs/WebAssembly#Browser_compatibility).
-
-### Examples
-
-There are examples in the `/examples` folder.
-
-One of them uses webworkers to multithread the PoW. The other one is single threaded.
