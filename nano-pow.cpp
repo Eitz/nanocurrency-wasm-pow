@@ -32,7 +32,7 @@ T getUIntFromHex(const char *str)
     return accumulator;
 }
 
-void hexToBytes(const char *hash, uint8_t *output)
+void getBytesFromHex(const char *hash, uint8_t *output)
 {
     int j = 0;
     std::string hex(hash);
@@ -85,7 +85,7 @@ uint64_t tryToGetWork(const uint8_t *bytes, const uint64_t threshold)
 uint64_t _getPow(const char *hashString, const char *thresholdString)
 {
     uint8_t *hash;
-    hexToBytes(hashString, hash);
+    getBytesFromHex(hashString, hash);
     uint64_t threshold = getUIntFromHex<uint64_t>(thresholdString);
 
     return tryToGetWork(hash, threshold);
