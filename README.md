@@ -35,13 +35,12 @@ somewhere and include `nano-pow.js` in your html as usual.
 To call the "getPoW" function you can do:
 
 ```javascript
-var hash = "SOME_RAIBLOCKS_HASH_HERE_AND_STUFF_HEX_ENCODED_32_BYTES";
-var calculatePoW = Module.cwrap("getPoW", "string", ["string"]);
-var pow = calculatePoW(hash);
+const hash = "BD9F737DDECB0A34DFBA0EDF7017ACB0EF0AA04A6F7A73A406191EF80BB290AD";
+const pow = getPoW(hash, threshold);
 console.log(pow);
 ```
 
-What that function does is to try to find a valid PoW in 10,000,000 iterations.
+What that function does is to try to find a valid PoW in 5,000,000 iterations.
 If it finds it it will return the result as a hex string.
 If it does not find it, will return a 64bit hex 0 (`0000000000000000`).
 

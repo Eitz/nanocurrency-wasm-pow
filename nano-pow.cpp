@@ -1,25 +1,51 @@
 #include "vendor/blake2/blake2.h"
+#include "vendor/blake2/blake2b-ref.cpp"
 #include "vendor/xorshift.hpp"
 #include <emscripten/emscripten.h>
 #include <random>
+#include <ctype.h>
+// #include "<inttypes.h>"
 
-const uint64_t THRESHOLD__SEND_CHANGE = 0xfffffff800000000;
-const uint64_t THRESHOLD__OPEN_RECEIVE = 0xfffffe0000000000;
+// helpers
+template <typename T>
+T getValueFromChar(char c)
+{
+    if (isdigit(c)) /* '0' .. '9'*/
+        return c - '0';
+    else if (isupper(c)) /* 'A' .. 'F'*/
+        return c - 'A' + 10;
+    else /* 'a' .. 'f'*/
+        return c - 'a' + 10;
+}
 
-void hexToBytes(char *hexParam, uint8_t *bytesOutput)
+template <typename T>
+T getUIntFromHex(const char *str)
+{
+    T accumulator = 0;
+    for (size_t i = 0; isxdigit((unsigned char)str[i]); ++i)
+    {
+        char c = str[i];
+        accumulator *= 16;
+        accumulator += getValueFromChar<T>(c);
+    }
+
+    return accumulator;
+}
+
+void hexToBytes(const char *hash, uint8_t *output)
 {
     int j = 0;
-    std::string hex(hexParam);
+    std::string hex(hash);
     for (unsigned int i = 0; i < hex.length(); i += 2)
     {
         std::string byteString = hex.substr(i, 2);
         uint8_t byte = (uint8_t)strtol(byteString.c_str(), NULL, 16);
-        bytesOutput[j] = byte;
+        output[j] = byte;
         j++;
     }
 }
 
-uint64_t iterations(uint8_t *bytes, uint64_t threshold)
+uint64_t tryToGetWork(const uint8_t *bytes, const uint64_t threshold)
 {
     uint64_t work;
     uint64_t output = 0;
@@ -39,6 +65,9 @@ uint64_t iterations(uint8_t *bytes, uint64_t threshold)
     // 5M iterations
     uint64_t iteration(5000000);
 
+    // printf("threshold=%ju (0x%llx)\n", threshold, threshold);
+    // printf("iterations=%ju (0x%llx)\n", iteration, iteration);
+
     while (iteration && output < threshold)
     {
         work = rng.next();
@@ -49,6 +78,9 @@ uint64_t iterations(uint8_t *bytes, uint64_t threshold)
         iteration -= 1;
     }
 
+    // printf("iterations=%ju (0x%llx)\n", iteration, iteration);
+    // printf("output=%ju (0x%llx)\n", output, output);
+
     if (output > threshold)
     {
         return work;
@@ -56,25 +88,24 @@ uint64_t iterations(uint8_t *bytes, uint64_t threshold)
     return 0;
 }
 
-char *getPow(char *hex, uint64_t threshold)
+uint64_t _getPow(const char *hashString, const char *thresholdString)
 {
-    uint8_t *bytesOutput;
-    hexToBytes(hex, bytesOutput);
-    uint64_t work = iterations(bytesOutput, threshold);
-    char str[32];
-    sprintf(str, "%016llx", work);
-    return (char *)str;
+    // printf("2 -- hash=(%s), threshold=(%s)\n", hashString, thresholdString);
+    uint8_t *hash;
+    hexToBytes(hashString, hash);
+    uint64_t threshold = getUIntFromHex<uint64_t>(thresholdString);
+
+    return tryToGetWork(hash, threshold);
 }
 
 extern "C"
 {
-    char *EMSCRIPTEN_KEEPALIVE getPowLight(char *hex)
+    char *EMSCRIPTEN_KEEPALIVE getProofOfWork(const char *hashString, const char *thresholdString)
     {
-        return getPow(hex, THRESHOLD__OPEN_RECEIVE);
-    }
-
-    char *EMSCRIPTEN_KEEPALIVE getPowHeavy(char *hex)
-    {
-        return getPow(hex, THRESHOLD__SEND_CHANGE);
+        // printf("1 -- hash=(%s), threshold=(%s)\n", hashString, thresholdString);
+        uint64_t work = _getPow(hashString, thresholdString);
+        char workAsChar[32];
+        sprintf(workAsChar, "%016llx", work);
+        return workAsChar;
     }
 }

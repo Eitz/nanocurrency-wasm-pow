@@ -2,38 +2,23 @@
 <html>
   <head> </head>
   <body>
-    <script src="/pow.js"></script>
-    <!-- <script src="/startThreads.js"></script> -->
+    <script src="/nano-pow/index.js"></script>
     <script>
-      var PoW;
-      Module.onRuntimeInitialized = function () {
-        console.log("Started");
-        PoW = (hash) => Module.ccall("getPowLight", "string", ["string"], hash);
-      };
+      test();
 
-      async function runPow() {
-        var start = Date.now();
-        console.log("runPow");
+      async function test() {
+        const start = Date.now();
         const hash =
-          "BD9F737DDECB0A34DFBA0EDF7017ACB0EF0AA04A6F7A73A406191EF80BB290AD";
-        var work = PoW(hash);
-        while (work == "0000000000000000") {
-          console.log("Not found in 10000000 iterations");
-          work = PoW(hash);
-        }
-        var end = Date.now();
+          "BD9F737DDECB0A34DFBA0EDF7017ACB0EF0AA04A6F7A73A406191EF80BB20000";
 
-        var time = (end - start) / 1000;
-        console.log("Time spent " + time);
-        console.log(work);
-      }
+        const proofOfWork = await NanoPow.getProofOfWork({
+          hash,
+          threshold: NanoPow.THRESHOLD__OPEN_RECEIVE, // or NanoPow.THRESHOLD__OPEN_RECEIVE
+        });
 
-      function hex_uint8(hex) {
-        var length = (hex.length / 2) | 0;
-        var uint8 = new Uint8Array(length);
-        for (let i = 0; i < length; i++)
-          uint8[i] = parseInt(hex.substr(i * 2, 2), 16);
-        return uint8;
+        const end = Date.now();
+        const time = (end - start) / 1000;
+        console.log({ proofOfWork, time, hash });
       }
     </script>
   </body>

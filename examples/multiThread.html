@@ -3,28 +3,28 @@
   <head> </head>
 
   <body>
-    <script src="/pow.js"></script>
-    <script src="/multi-thread.js"></script>
+    <script src="/nano-pow/index.js"></script>
     <script>
-      let start;
-      const hash =
-        "BD9F737DDECB0A34DFBA0EDF7017ACB0EF0AA04A6F7A73A406191EF80BB290AD";
-      const workers = getPowWorkers();
-      powCallback(
-        workers,
-        hash,
-        function () {
-          start = Date.now();
-          console.log("Started");
-        },
-        function (result) {
-          console.log("Done");
-          var end = Date.now();
-          var time = (end - start) / 1000;
-          console.log("Time spent " + time);
-          console.log(result);
-        }
-      );
+      test();
+
+      async function test() {
+        const start = Date.now();
+        const hash =
+          "BD9F737DDECB0A34DFBA0EDF7017ACB0EF0AA04A6F7A73A406191EF80BB20000";
+
+        const proofOfWork = await NanoPow.getProofOfWorkMultiThreaded(
+          {
+            hash,
+            threshold: NanoPow.THRESHOLD__OPEN_RECEIVE,
+          }
+          // , { workers: 5 } // optionally limit the number of workers, default is number of threads-1
+        );
+
+        const end = Date.now();
+        const time = (end - start) / 1000;
+
+        console.log({ hash, time, proofOfWork });
+      }
     </script>
   </body>
 </html>
