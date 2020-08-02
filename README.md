@@ -14,29 +14,11 @@ Compiling to WebAssembly, the result is around 10 times faster than a pure JS Po
 
 This basically makes possible to generate proofs of work on modern browsers in a reasonable time.
 
-### Compiling from source
-
-All the PoW work takes place at <code>nano-pow.cpp</code>.
-There is the main loop which calculates the PoW and a function which
-can be called from JS and runs the loop (the iterations function).
-
-To compile it to Web Assembly you need to install **emscripten**:
-
-- https://emscripten.org/docs/getting_started/downloads.html
-
-With that done, at the repo directory run:
-
-```bash
-$ ./compile.sh
-```
-
-It will output 2 files: `nano-pow.js` and `nano-pow.wasm`. To get directions on how to use these files, check the JS files in the `nano-pow` directory.
-
-### Using the premade helpers
+### Usage
 
 See the files in the `examples` directory.
 
-To call the "NanoPow.getProofOfWorkMultiThreaded" function you can do:
+To get the proof of work you can simply add the `nano-pow/index.js` to your source code and do:
 
 ```html
     <script src="/nano-pow/index.js"></script>
@@ -64,7 +46,32 @@ To call the "NanoPow.getProofOfWorkMultiThreaded" function you can do:
     </script>
 ```
 
-What that function does is to try to find a valid PoW in a multithreaded fashion. #CONTINUE#
+What that function does is to try to find a valid PoW in a multithreaded fashion. 
+
+#### Available proof Of Work thresholds
+```javascript
+  NanoPow.THRESHOLD__SEND_CHANGE: "fffffff800000000", // avg > 25secs on my PC
+  NanoPow.THRESHOLD__OPEN_RECEIVE: "fffffe0000000000", // avg < 2.5secs on my PC
+```
+
+### Compiling from source
+
+All the PoW work takes place at <code>nano-pow.cpp</code>.
+There is the main loop which calculates the PoW and a function which
+can be called from JS and runs the loop (the iterations function).
+
+To compile it to Web Assembly you need to install **emscripten**:
+
+- https://emscripten.org/docs/getting_started/downloads.html
+
+With that done, at the repo directory run:
+
+```bash
+$ ./compile.sh
+```
+
+It will output 2 files: `nano-pow.js` and `nano-pow.wasm`. To get directions on how to use these files, check the JS files in the `nano-pow` directory.
+
 
 ### Additional help
 
