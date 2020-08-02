@@ -1,6 +1,7 @@
-- Forked from [jaimehgb/RaiBlocksWebAssemblyPoW](https://github.com/jaimehgb/RaiBlocksWebAssemblyPoW)
+# **Currently a work in progress.**
+Use for reference only.
 
-**Currently a work in progress.**, use for reference only.
+- Forked from [jaimehgb/RaiBlocksWebAssemblyPoW](https://github.com/jaimehgb/RaiBlocksWebAssemblyPoW)
 
 ## nanocurrency-wasm-pow
 
@@ -29,34 +30,45 @@ With that done, at the repo directory run:
 $ ./compile.sh
 ```
 
-It will output 2 files: `nano-pow.js` and `nano-pow.wasm`, place those files together
-somewhere and include `nano-pow.js` in your html as usual.
+It will output 2 files: `nano-pow.js` and `nano-pow.wasm`. To get directions on how to use these files, check the JS files in the `nano-pow` directory.
 
-To call the "getPoW" function you can do:
+### Using the premade helpers
 
-```javascript
-const hash = "BD9F737DDECB0A34DFBA0EDF7017ACB0EF0AA04A6F7A73A406191EF80BB290AD";
-const pow = getPoW(hash, threshold);
-console.log(pow);
+See the files in the `examples` directory.
+
+To call the "NanoPow.getProofOfWorkMultiThreaded" function you can do:
+
+```html
+    <script src="/nano-pow/index.js"></script>
+    <script>
+      test();
+
+      async function test() {
+        const start = Date.now();
+        const hash =
+          "BD9F737DDECB0A34DFBA0EDF7017ACB0EF0AA04A6F7A73A406191EF80BB20000";
+
+        const proofOfWork = await NanoPow.getProofOfWorkMultiThreaded(
+          {
+            hash,
+            threshold: NanoPow.THRESHOLD__OPEN_RECEIVE,
+          }
+          // , { workers: 5 } // optionally limit the number of workers, default is number of threads-1
+        );
+
+        const end = Date.now();
+        const time = (end - start) / 1000;
+
+        console.log({ hash, time, proofOfWork });
+      }
+    </script>
 ```
 
-What that function does is to try to find a valid PoW in 5,000,000 iterations.
-If it finds it it will return the result as a hex string.
-If it does not find it, will return a 64bit hex 0 (`0000000000000000`).
+What that function does is to try to find a valid PoW in a multithreaded fashion. #CONTINUE#
 
-To call the function, you have to wait for WebAssembly to load and compile.
+### Additional help
 
-This is signaled by the following event:
-
-```javascript
-Module["onRuntimeInitialized"] = function () {
-  // Its all fine here
-  // do stuff
-  // ...
-};
-```
-
-There are more docs about the Module API and emscripten itself [here](http://kripken.github.io/emscripten-site/docs/porting/connecting_cpp_and_javascript/index.html).
+There are more docs about the emscripten itself [here](http://kripken.github.io/emscripten-site/docs/porting/connecting_cpp_and_javascript/index.html).
 
 ### Compatibility
 
