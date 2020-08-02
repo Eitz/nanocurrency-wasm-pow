@@ -65,9 +65,6 @@ uint64_t tryToGetWork(const uint8_t *bytes, const uint64_t threshold)
     // 5M iterations
     uint64_t iteration(5000000);
 
-    // printf("threshold=%ju (0x%llx)\n", threshold, threshold);
-    // printf("iterations=%ju (0x%llx)\n", iteration, iteration);
-
     while (iteration && output < threshold)
     {
         work = rng.next();
@@ -78,9 +75,6 @@ uint64_t tryToGetWork(const uint8_t *bytes, const uint64_t threshold)
         iteration -= 1;
     }
 
-    // printf("iterations=%ju (0x%llx)\n", iteration, iteration);
-    // printf("output=%ju (0x%llx)\n", output, output);
-
     if (output > threshold)
     {
         return work;
@@ -90,7 +84,6 @@ uint64_t tryToGetWork(const uint8_t *bytes, const uint64_t threshold)
 
 uint64_t _getPow(const char *hashString, const char *thresholdString)
 {
-    // printf("2 -- hash=(%s), threshold=(%s)\n", hashString, thresholdString);
     uint8_t *hash;
     hexToBytes(hashString, hash);
     uint64_t threshold = getUIntFromHex<uint64_t>(thresholdString);
@@ -102,7 +95,6 @@ extern "C"
 {
     char *EMSCRIPTEN_KEEPALIVE getProofOfWork(const char *hashString, const char *thresholdString)
     {
-        // printf("1 -- hash=(%s), threshold=(%s)\n", hashString, thresholdString);
         uint64_t work = _getPow(hashString, thresholdString);
         char workAsChar[32];
         sprintf(workAsChar, "%016llx", work);
