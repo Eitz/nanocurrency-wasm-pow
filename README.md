@@ -12,8 +12,8 @@ Compiling to WebAssembly, the result is around 10 times faster than a pure JS Po
 This basically makes possible to generate proofs of work on modern browsers in a **reasonable time** (see below).
 
 **Average time it takes to compute in a Ryzen 7 3700x**:
-* **Send/change blocks:** average of <25 seconds
-* **Open/receive blocks:** average of <2.5 seconds
+- **Send/change blocks:** average of <25 seconds
+- **Open/receive blocks:** average of <2.5 seconds
 
 ### Usage
 
@@ -48,10 +48,13 @@ To get the proof of work you can simply add the `nano-pow/index.js` to your sour
 See the files in the `examples` directory for a full overview.
 
 #### Available proof Of Work thresholds
+
 ```javascript
-  NanoPow.THRESHOLD__SEND_CHANGE: "fffffff800000000", // avg > 25secs on my PC
-  NanoPow.THRESHOLD__OPEN_RECEIVE: "fffffe0000000000", // avg < 2.5secs on my PC
+  NanoPow.THRESHOLD__SEND_CHANGE,  // "fffffff800000000"
+  NanoPow.THRESHOLD__OPEN_RECEIVE, // "fffffe0000000000"
 ```
+
+If a new threshold is needed in a new version, it can be passed to the function `getProofOfWorkMultiThreaded` as a simple hex string.
 
 ### Compiling from source
 
@@ -59,7 +62,7 @@ All the PoW work takes place at <code>nano-pow.cpp</code>.
 There is the main loop which calculates the PoW and a function which
 can be called from JS and runs the loop (the iterations function).
 
-To compile it to Web Assembly you need to install **emscripten**:
+To compile it to Web Assembly you need to install **emscripten** and add it to your path:
 
 - https://emscripten.org/docs/getting_started/downloads.html
 
