@@ -53,11 +53,11 @@ uint64_t tryToGetWork(const uint8_t *bytes, const uint64_t threshold)
     blake2b_init(&hash, sizeof(output));
     std::xorshift1024star rng;
 
-    const int range_from = 0;
-    const int range_to = 32767;
-    std::random_device rand_dev;
-    std::mt19937 generator(rand_dev());
-    std::uniform_int_distribution<int> distr(range_from, range_to);
+    const int rangeFrom = 0;
+    const int rangeTo = 32767;
+    std::random_device randomDevice;
+    std::mt19937 generator(randomDevice());
+    std::uniform_int_distribution<int> distr(rangeFrom, rangeTo);
 
     for (int j = 0; j < 16; j++)
         rng.s[j] = distr(generator);
