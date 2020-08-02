@@ -66,9 +66,7 @@ function getPowWorkers(
 ) {
   const workers = [];
   for (let i = 0; i < threads; i++) {
-    workers[i] = new Worker(
-      workerScriptPath || "/nano-pow/thread-worker.js.js"
-    );
+    workers[i] = new Worker(workerScriptPath || "/nano-pow/thread-worker.js");
   }
   return workers;
 }
